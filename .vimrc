@@ -17,6 +17,7 @@ Plugin 'vkmyla/fem'
 "Bundle 'ervandew/supertab'
 Plugin 'ctrlp.vim'
 Plugin 'jlanzarotta/bufexplorer'
+Plugin 'mbbill/undotree'
 "Bundle 'regedarek/ZoomWin'
 "Bundle 'Syntastic'
 "Bundle 'matchit.zip'
@@ -33,6 +34,7 @@ Plugin 'mileszs/ack.vim'
 "" Plugin cickill/vim-pasta'
 ""
 "Bundle 'tmhedberg/SimpylFold'
+Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-surround'
 Plugin 'klen/python-mode'
 ""Bundle 'Lokaltog/vim-powerline'
@@ -50,7 +52,8 @@ nmap ga <Plug>(EasyAlign)
 
 let g:easy_align_delimiters = {
       \ '>': {'pattern': '>>\|=>\|>'},
-      \ '#': {'pattern': '#'}
+      \ '#': {'pattern': '#'},
+      \ ';': {'pattern': ';'}
       \}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -186,21 +189,25 @@ inoremap <leader>w <C-c>:w<cr>
 " Map quit to leader 
 nnoremap <leader>q :q<cr>
 inoremap <leader>q <C-c>:q<cr>
-" pairs with leader
-inoremap <leader>' ''<ESC>i
-inoremap <leader>" ""<ESC>i
-inoremap <leader>( ()<ESC>i
-inoremap <leader>8 []<ESC>i
-inoremap <leader>7 {}<ESC>i 
+" pairs with leader not necessary as the plugin takes care of it
+" inoremap <leader>' ''<ESC>i
+" inoremap <leader>" ""<ESC>i
+" inoremap <leader>( ()<ESC>i
+" inoremap <leader>8 []<ESC>i
+" inoremap <leader>7 {}<ESC>i
 " Map close line perl
 nnoremap <leader><leader> A;<ESC>
 inoremap <leader><leader> <C-c>A;<ESC>o
-" comment/uncomment blocks of code (in vmode)
-nnoremap <leader>c :s/^/#/gi<Enter>
-nnoremap <leader>C :s/^#//gi<Enter>
-vnoremap <leader>c :s/^/#/gi<Enter>
-vnoremap <leader>C :s/^#//gi<Enter>
+" comment/uncomment blocks of code (in vmode) not necessay as nerd commenter
+" takes care of it
+" nnoremap <leader>c :s/^/#/gi<Enter>
+" nnoremap <leader>C :s/^#//gi<Enter>
+" vnoremap <leader>c :s/^/#/gi<Enter>
+" vnoremap <leader>C :s/^#//gi<Enter>
 map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>u :UndotreeToggle<CR>
+nmap <leader>j :CtrlP pwd<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " syntax color complex things like @{${"foo"}}
 let perl_extended_vars = 1
@@ -340,7 +347,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set tags=./tags,tags;$HOME
-nmap <leader>ne :NERDTreeToggle<CR>
+nmap <leader>nn :NERDTreeToggle<CR>
 nmap <leader>n  :NERDTreeFocus<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Nerd Commenter Settings
@@ -374,7 +381,7 @@ let g:NERDTrimTrailingWhitespace = 1
 set foldlevelstart=99
 
 " Highlight folds
-" highlight Folded  ctermfg=cyan ctermbg=black
+" highlight Folded  ctermfg=cyan ctermbg=black llllllll [   [sdf
 
 " Toggle on and off...
 nmap <silent> <expr>  zz  FS_ToggleFoldAroundSearch({'context':1})
@@ -390,4 +397,21 @@ augroup FoldSub
     autocmd BufEnter *.vim,.vimrc nmap <silent> <expr>  za  FS_FoldAroundTarget(vim_sub_pat.'\\|^\s*".*',{'context':0, 'folds':'invisible'})
     autocmd BufEnter * nmap <silent> <expr>             zv  FS_FoldAroundTarget(vim_sub_pat.'\\|^\s*".*',{'context':0, 'folds':'invisible'})
 augroup END
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" word seperators 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:delimitMate_enabled = 1
+let g:delimitMate_autoclose = 1
+let b:delimitMate_eol_marker = ';'
+" set iskeyword+="@,48-57,_,192-255,95"
+" set iskeyword-=_
+" fire[]
+" water("ssdf")
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""persistent undo""""""""""""""""""""""""""""""""""""""
+if has('persistent_undo')
+  set undofile
+  set undodir=$HOME/.vim/undo
+endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
