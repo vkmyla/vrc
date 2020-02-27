@@ -30,17 +30,23 @@ Plugin 'mbbill/undotree'
 "" Bundle 'tpope/vim-fugitive'
 "" Bundle 'fatih/vim-go'
 Plugin 'mileszs/ack.vim'
+Plugin 'prabirshrestha/async.vim' 
+Plugin 'prabirshrestha/vim-lsp' 
+Plugin 'prabirshrestha/asyncomplete.vim' 
 ""
 "" Plugin cickill/vim-pasta'
 ""
 "Bundle 'tmhedberg/SimpylFold'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-surround'
-Plugin 'klen/python-mode'
+Plugin 'adelarsq/vim-matchit'
+Plugin 'mattn/emmet-vim'
+" Plugin 'klen/python-mode'
 ""Bundle 'Lokaltog/vim-powerline'
 ""Bundle 'ggreer/the_silver_searcher'
 "Bundle 'rking/ag.vim'
 Plugin 'vim-scripts/ctags.vim'
+Plugin 'vim-scripts/taglist.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -52,8 +58,9 @@ nmap ga <Plug>(EasyAlign)
 
 let g:easy_align_delimiters = {
       \ '>': {'pattern': '>>\|=>\|>'},
-      \ '#': {'pattern': '#'},
-      \ ';': {'pattern': ';'}
+      \ '#': {'pattern': '#.'},
+      \ ';': {'pattern': ';'},
+      \ ':': {'pattern': ':'}
       \}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -62,6 +69,7 @@ let g:easy_align_delimiters = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Visual Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Plugin 'ap/vim-css-color'
 set t_Co=256
 Plugin 'chriskempson/tomorrow-theme'
 Plugin 'tyrannicaltoucan/vim-quantum'
@@ -70,6 +78,7 @@ Plugin 'rafi/awesome-vim-colorschemes'
 " Plugin 'flazz/vim-colorschemes'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'lsdr/monokai'
+Plugin 'djjcast/mirodark'
 Plugin 'xoria256.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'NLKNguyen/papercolor-theme'
@@ -79,15 +88,20 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
 let g:airline_powerline_fonts = 1
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-colorscheme-switcher'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Disabled due to short x mode
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin 'xolox/vim-misc'
+" Plugin 'xolox/vim-colorscheme-switcher'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <F5> :PrevColorScheme<CR>
 map <F6> :NextColorScheme<CR>
 map <F4> :echo g:colors_name<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let base16colorspace=256  " Access colors present in 256 colorspace
 call togglebg#map("<F9>")
-syntax enable
+" syntax enable
+syntax on
 set background=dark
 " set termguicolors
 " colorscheme quantum
@@ -96,6 +110,8 @@ set background=dark
 " colorscheme PaperColor
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai_template
+" colorscheme mirodark
+""" colorscheme molokai_template
 " colorscheme solarized
 " colorscheme seoul256
 " colorscheme monokai
@@ -112,6 +128,8 @@ let g:jellybeans_use_lowcolor_black = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Defaults
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" set pythonthreehome=/home/vx7s4ra/anaconda3
+" set pythonthreedll=
 set nu
 set ch=2
 set cursorline cursorcolumn
@@ -217,29 +235,29 @@ nnoremap <silent> _t :%!perltidy -q<Enter>
 vnoremap <silent> _t :!perltidy -q<Enter>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
+" set diffexpr=MyDiff()
+" function MyDiff()
+"   let opt = '-a --binary '
+"   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+"   if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+"   let arg1 = v:fname_in
+"   if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+"   let arg2 = v:fname_new if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+"   let arg3 = v:fname_out
+"   if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+"   let eq = ''
+"   if $VIMRUNTIME =~ ' '
+"     if &sh =~ '\<cmd'
+"       let cmd = '""' . $VIMRUNTIME . '\diff"'
+"       let eq = '"'
+"     else
+"       let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+"     endif
+"   else
+"     let cmd = $VIMRUNTIME . '\diff'
+"   endif
+"   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+" endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "let g:keys_to_disable_if_not_preceded_by_count = ["j", "k", "h", "l"]
@@ -414,4 +432,21 @@ if has('persistent_undo')
   set undofile
   set undodir=$HOME/.vim/undo
 endif
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""EMMET SETTINGS""""""""""""""""""""""""""""""""""""
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+let g:user_emmet_leader_key='<C-ö>'
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""user commands!"""""""""""""""""""""""""""""""""
+command Mtags !ctags -R .
+command Nefa set path+=/home/vx7s4ra/svn/nefa_tst_v13/nefa/modules
+set path+=/usr/people/neapps/ne_perl/lib64/perl5
+set path+=/usr/people/neapps/ne_perl/share/perl5
+set path+=/usr/local/lib64/perl5
+set path+=/usr/local/share/perl5
+set path+=/usr/lib64/perl5/vendor_perl
+set path+=/usr/share/perl5/vendor_perl
+set path+=/usr/lib64/perl5
+set path+=/usr/share/perl5
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
